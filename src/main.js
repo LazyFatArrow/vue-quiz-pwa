@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuetify from 'Vuetify';
+import VueEvents from 'vue-events'
 
 import App from './App';
 import router from './router';
@@ -9,6 +10,7 @@ import './auth';
 import('vuetify/dist/vuetify.css');
 
 Vue.use(Vuetify);
+Vue.use(VueEvents);
 
 /* eslint-disable no-new */
 new Vue({
