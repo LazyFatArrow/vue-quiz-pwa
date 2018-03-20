@@ -1,5 +1,13 @@
 <template>
   <v-layout row wrap>
+    <quiz-card
+      v-for="quiz in quizes"
+      :key="quiz.id"
+      :title="quiz.title"
+      :description="quiz.description"
+      :id="quiz.id"
+    />
+
     <v-flex xs12>
       <v-btn
         v-show="loggedIn"
@@ -19,14 +27,34 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
+
+  import QuizCard from '@/components/quiz/QuizCard';
 
   export default {
     name: 'home',
 
+    components: {
+      QuizCard
+    },
+
+    created() {
+      this.findQuizes();
+    },
+
     computed: {
       ...mapGetters('user', {
         loggedIn: 'loggedIn'
+      }),
+
+      ...mapGetters('quiz', {
+        quizes: 'list'
+      })
+    },
+
+    methods: {
+      ...mapActions('quiz', {
+        findQuizes: 'list'
       })
     }
   }

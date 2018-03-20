@@ -13,12 +13,17 @@
     <v-subheader>Quiz Questions</v-subheader>
     <quiz-questions />
 
-    <!-- <quiz-actions/> -->
+    <quiz-actions
+      :action="createQuiz"
+      actionName="Create"
+    />
 
   </v-card>
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
+
   import QuizInformation from '@/components/quiz/QuizInformation';
   import QuizQuestions from '@/components/quiz/QuizQuestions';
   import QuizActions from '@/components/quiz/QuizActions';
@@ -30,6 +35,22 @@
       QuizInformation,
       QuizQuestions,
       QuizActions
+    },
+
+    methods: {
+      ...mapActions('quiz', {
+        create: 'create'
+      }),
+
+      async createQuiz() {
+        try {
+          await this.create();
+          this.$router.push('/');
+        } catch(error) {
+          alert(error);
+        }
+
+      }
     }
   }
 </script>

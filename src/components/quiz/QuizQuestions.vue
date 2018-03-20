@@ -16,6 +16,7 @@
                     <v-text-field
                       label="Question"
                       :value="item.question"
+                      @input="updateQuestionTitle($event, questionIndex)"
                     ></v-text-field>
                     </v-flex>
                     <v-flex xs2>
@@ -23,6 +24,7 @@
                       type="number"
                       label="Points"
                       :value="item.points"
+                      @input="updateQuestionPoints($event, questionIndex)"
                     ></v-text-field>
                   </v-flex>
                 </v-layout>
@@ -89,6 +91,7 @@
 
   import {
     ADD_ANSWER,
+    UPDATE_QUESTION,
     REMOVE_QUESTION,
     REMOVE_ANSWER,
     UPDATE_ANSWER
@@ -106,6 +109,7 @@
     methods: {
       ...mapMutations('quiz', {
         addAnswer: ADD_ANSWER,
+        updateQuestion: UPDATE_QUESTION,
         removeQuestion: REMOVE_QUESTION,
         removeAnswer: REMOVE_ANSWER,
         updateAnswer: UPDATE_ANSWER
@@ -117,7 +121,7 @@
           isRight: this.quiz
             .questions[questionIndex]
             .answers[answerIndex]
-            .isRight || undefined,
+            .isRight,
 
           questionIndex,
           answerIndex,
@@ -134,6 +138,26 @@
           questionIndex,
           answerIndex,
         })
+      },
+
+      updateQuestionTitle(value, questionIndex) {
+        this.updateQuestion({
+          question: value,
+          points: this.quiz.questions[questionIndex].points,
+          questionIndex
+        });
+      },
+
+      updateQuestionPoints(value, questionIndex) {
+        // test if the input does not contain a valid number or the number is negative
+        const points = parseInt(value);
+        if (isNaN(points) || points < 0) return; // cancel triggering the mutation
+
+        this.updateQuestion({
+          question: this.quiz.questions[questionIndex].question,
+          points,
+          questionIndex
+        });
       }
     }
   }
