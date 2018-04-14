@@ -11,7 +11,8 @@ import {
   UPDATE_ANSWER,
   RESET_QUIZ,
   RESET_QUIZ_LIST,
-  PUSH_QUIZ
+  PUSH_QUIZ,
+  SET_QUIZ
 } from './mutations';
 
 const state = {
@@ -40,12 +41,15 @@ const state = {
     ]
   },
 
-  list: []
+  list: [],
+
+  quiz: null
 };
 
 const getters = {
   newQuiz: ({newQuiz}) => newQuiz,
-  list: ({list}) => list
+  list: ({list}) => list,
+  quiz: ({quiz}) => quiz
 };
 
 const mutations = {
@@ -129,6 +133,10 @@ const mutations = {
 
   [RESET_QUIZ_LIST](state) {
     state.list = [];
+  },
+
+  [SET_QUIZ](state, quiz) {
+    state.quiz = quiz;
   }
 
 };
@@ -190,6 +198,17 @@ const actions = {
         }
       });
     });
+  },
+
+  async get({commit}, id) {
+    const quiz = await db.collection('quizes').doc(id).get();
+
+    if (quiz.exists) {
+      commit(SET_QUIZ, {
+        id: quiz.id,
+        ...quiz.data()
+      });
+    }
   }
 };
 
