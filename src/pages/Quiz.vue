@@ -1,6 +1,6 @@
 <template>
-  <v-card v-if="quiz">
-    <v-container>
+  <v-card >
+    <v-container v-if="quiz">
       <v-layout v-if="done">
         <v-flex sm12>
           <p>Your score is {{score}} / {{totalScore}}</p>
@@ -22,7 +22,7 @@
       </v-layout>
       <v-stepper v-model="step" v-else>
         <v-stepper-header>
-          <template v-for="s in steps">
+          <template v-for="s in quiz.questions.length">
             <v-stepper-step
               :key="s"
               :step="s"
@@ -61,15 +61,12 @@
     name: 'quiz',
 
     created() {
+      // get the quiz using the id passed in url params
       this.getQuiz(this.$route.params.id);
     },
 
     computed: {
       ...mapGetters('quiz', {quiz: 'quiz'}),
-
-      steps() {
-        return this.quiz && this.quiz.questions.length || 0;
-      },
 
       totalScore() {
         return this.quiz.questions.reduce((curr, question)   => {
@@ -82,24 +79,29 @@
       ...mapActions('quiz', {getQuiz: 'get'}),
 
       next() {
+        // check if the answer is correct
         if (this.stepAnswer == null) return;
 
         const question = this.quiz.questions[this.step - 1];
         const answer = question.answers[this.stepAnswer];
 
-        if (answer.isRight) this.score += question.points;
+        if (answer.isRight)
+          this.score += question.points;
         else {
+          // add mistake to the mistakes array
           this.mistakes.push({
             question: question.question,
-            rightAnswer: question.answers.filter(answer => answer.isRight)[0].answer,
+            rightAnswer: question.answers.find(answer => answer.isRight).answer,
             chosenAnswer: answer.answer
           });
         }
 
-        if (this.step < this.steps) {
+        // check if the quiz is done
+        if (this.step < this.quiz.questions.length) {
           this.step++;
           this.stepAnswer = null;
         } else {
+          console.log('here');
           this.done = true;
         }
       }

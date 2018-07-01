@@ -11,4 +11,4 @@ export const UPDATE_ANSWER = "UPDATE_ANSWER";
 export const RESET_QUIZ = "RESET_NEW_QUIZ";
 export const PUSH_QUIZ = "PUSH_QUIZ";
 export const SET_QUIZ = "SET_QUIZ";
-export const RESET_QUIZ_LIST = "export const";
+export const RESET_QUIZ_LIST = "RESET_QUIZ";
