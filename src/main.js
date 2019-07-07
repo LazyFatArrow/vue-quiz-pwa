@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Vuetify from 'Vuetify';
+import Vuetify from 'vuetify';
 import VueEvents from 'vue-events'
 
 import App from './App';
